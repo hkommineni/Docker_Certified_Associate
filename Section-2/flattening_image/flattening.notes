@@ -1,0 +1,6 @@
+docker export myubuntu myubuntudemo.tar
+docker export myubuntu > myubuntudemo.tar
+cat myubuntudemo.tar | docker import - myubuntu:latest
+docker images
+docker image history myubuntu
+

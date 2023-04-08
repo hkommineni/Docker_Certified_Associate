@@ -1,0 +1,2 @@
+# docker container commit --change='CMD ["ash"]' busybox
+# docker container commit busybox busybox-modidied01

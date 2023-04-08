@@ -1,0 +1,2 @@
+# Allows to clean up dangling images
+    Image doens't have tags or not associated to any containers
