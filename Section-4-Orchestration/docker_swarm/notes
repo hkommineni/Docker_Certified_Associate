@@ -1,0 +1,213 @@
+###################################################################################################
+
+# vi docker-install.sh
+
+# #!/bin/bash
+# sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+# sudo yum -y install docker-ce
+# sudo systemctl start docker
+# sudo systemctl enable docker
+
+# chmod +x docker-install.sh
+
+# ./docker-install.sh
+
+# sudo su -
+# curl -s ifconfig.me
+
+# docker swarm init --advertise-addr 142.93.214.57
+
+# Note: Rough Notes until here
+########################################################################################################
+
+
+# Replicated Service CLI Command
+docker service create --name webserver --replicas 1 nginx
+
+# Scaling Service CLI Command
+# Scaling Up Operation
+    docker service scale webserver=5
+
+# Scaling Down Operation
+    docker service scale webserver=1
+
+# Verify Service Details:
+    docker service ps webserver
+
+# Remove Service After Practical:
+    docker service rm webserver
+
+# Multiple Approaches for Scaling
+# Two Approaches:
+    docker service scale service01=1
+    docker service update --replicas 1 service02
+
+# Scaling Multiple Services Together:
+    docker service scale service01=3 service02=3
+
+# Global Service CLI Command
+# Global Service
+    docker service create --name antivirus --mode global -dt ubuntu
+    docker service ps antivirus
+
+# Replicated Service
+    docker service create --name myreplica --replicas 1 nginx
+
+# Drain CLI Commands
+# Change the Node Availability to Drain
+    docker node update --availability drain swarm03
+
+# Verify Node status
+    docker node ls
+
+# Change the Node Availability To Active
+    docker node update --availability active swarm03
+
+# Inspecting Services and Nodes
+# Inspecting a Service
+    docker service inspect demotroubleshoot
+    docker service inspect demotroubleshoot --pretty
+
+# Inspecting a Node
+    docker node inspect <swarm01>
+    docker node inspect <swarm01> -pretty
+
+# Publish Port at Service
+# Create a Service by Publishing port
+    docker service create --name mywebserver --replicas 1 --publish 8080:80 nginx
+
+# Verify Ports in Linux Server
+    netstat -ntlp
+
+# Verify Public IP address
+    ifconfig eth0
+
+# Curl Request to IP on port 8080
+    curl <public IP>:8080
+
+# Start Docker Compose
+  docker-compose up -d
+
+# Bring Down application started via Docker Compose
+  docker-compose down
+
+################################
+# Stack CLI commands
+################################
+
+# Deploy Stack:
+  docker stack deploy --compose-file docker-compose.yml mydemo
+
+# Remove Stack
+  docker stack rm mydemo
+
+#####################################
+# Locking the Swarm Cluster
+#####################################
+
+# Setting up Autolock
+  docker swarm update --autolock=true
+  systemctl restart docker
+  docker node ls
+  docker swarm unlock
+
+# To Retrieve Key after swam is unlocked
+  docker swarm unlock-key
+  To unlock a swarm manager after it restarts, run the `docker swarm unlock` command and provide the one of following keys:
+    SWMKEY-1-iAYu0y7wrazLMaebtJ3qGh36fROaVZzh0jut5+XU188
+    SWMKEY-1-8OGAPwDx9pcnb1X30RO47SDY/BLzI+co9eT0mHi6GI0
+
+# To rotate the key:
+  docker swarm unlock-key --rotate
+
+################################################
+# Troubleshooting Swarm Dervice Deployments
+################################################
+  docker service inspect <service_id>
+
+###########################################
+# Mounting volumes via Swarm
+###########################################
+
+# Create Service with Volume
+  docker service create --name myservice --mount type=volume,source=myvolume,target=/mypath nginx
+
+# Verify the Host where service is created:
+  docker service ps myservice
+
+# Connect to Container and Verify Mount
+  docker container exec -it [CONTAINER-ID] bash
+  ls -l /
+
+  # Verify Volume Information
+    docker volume ls
+
+# Remove Service
+  docker service rm myservice
+
+#################################
+# Control Service Placement
+#################################
+
+# Add a Label to Node:
+  docker node update --label-add region=oma swarm03
+
+# Running Nodes Node Label Constraints in Omaha Region
+  docker service create --name myconstraint --constraint node.labels.region==oma --replicas 3 nginx
+
+###################################################################################
+# Overlay networks
+# Are used to communicated between containers that exists across different nodes
+###################################################################################
+
+################################
+# Creating a overlay networks
+################################
+
+# Create a custom network with driver
+  docker network create --driver overlay mynetwork
+
+# Create Service with Custom Overlay Network:
+  docker service create --name myoverlay --network mynetwork --replicas 3 nginx
+
+# Verify Networks:
+  docker network ls
+
+# Find the IP of Container
+  docker container inspect [CONTAINER-NAME]
+
+# Connect to Container and Install Ping
+  docker container exec -it [CONTAINER-NAME]
+  apt-get update && apt-get install iputils-ping
+  ping [IP]
+
+###############################
+# Secure overlay networks
+##############################
+
+# Create network driver with encrypted option --opt
+  docker network create --opt encrypted --driver overlay mynetwork-secure
+
+##############################################
+# Creating swarm services using templates
+##############################################
+
+# Specify the host name for docker container
+  docker service create --name nginxservice --hostname="{{.Node.Hostname}}-{{.Service.Name}}" nginx
+
+############################################
+# Split brain and importance of quorum
+############################################
+
+
+# Forcing New Cluster
+  docker swarm init --force-new-cluster --advertise-addr 206.189.139.211:2377
+
+
+
+
+
+
+
+
+
