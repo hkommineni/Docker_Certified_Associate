@@ -199,15 +199,5 @@ docker service create --name webserver --replicas 1 nginx
 # Split brain and importance of quorum
 ############################################
 
-
 # Forcing New Cluster
   docker swarm init --force-new-cluster --advertise-addr 206.189.139.211:2377
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,4 @@
+Create a pod from yaml file
+kubectl apply -f .\pod.yaml
+
+kubectl delete -f .\pod.yaml
