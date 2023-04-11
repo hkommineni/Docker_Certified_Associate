@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deafult-deny-pod
+spec:
+  podSelector:
+    matchLabels:
+      run: pod01
+  policyTypes:
+    - Ingress
+    - Egress

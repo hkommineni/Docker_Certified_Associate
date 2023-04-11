@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hk-daemonset
+spec:
+  template:
+    metadata:
+      labels:
+        name: kh-all-pods
+    spec:
+      containers:
+        - name: hk-pods
+          image: nginx
+  selector:
+    matchLabels:
+      name: kh-all-pods
