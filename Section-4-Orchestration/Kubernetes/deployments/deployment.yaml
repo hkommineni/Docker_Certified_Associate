@@ -1,9 +1,9 @@
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
-  name: hkreplicaset
+  name: hk-deployments
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       tier: frontend
@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
       - name: php-redis
-        image: gcr.io/google_samples/gb-frontend:v3
+        image: nginx:1.23.4
